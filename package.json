@@ -1,0 +1,27 @@
+{
+    "name": "typescript-promise",
+    "title": "typescript-promise",
+    "description": "A Simple TypeScript Promise Library",
+    "version": "1.0.0",
+    "main": "/promise.ts",
+    "author": "HJava",
+    "repository": {
+        "type": "git",
+        "url": "ssh://git@github.com:HJava/typescript-promise.git"
+    },
+    "keywords": [
+        "TypeScript",
+        "Promise",
+        "javascript"
+    ],
+    "dependencies": {
+        "typescript": "^3.2.1"
+    },
+    "devDependencies": {
+        "promises-aplus-tests": "^2.1.2"
+    },
+    "scripts": {
+        "build": "tsc promise.ts",
+        "promise.test": "promises-aplus-tests /promise-test"
+    }
+}
