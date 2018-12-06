@@ -1,8 +1,8 @@
 /**
 * @module promise
 * @author: Hjava
-* @description: 一个简单的TypeScript Promise库
-* @description: a simple TypeScript Promise Library
+* @description: 一个简单的TypeScript TypeScriptPromise库
+* @description: a simple TypeScript TypeScriptPromise Library
 * @since: 2018-11-23 15:00:38
 */
 
@@ -18,34 +18,6 @@ let index: number = 0;
 let randomId = Math.floor(Math.random() * 1000000);
 let functionStorage = {};
 let isRunningTask = false;
-
-if (global.MutationObserver) {
-    let observer = new MutationObserver((mutationList) => {
-        for (let mutation of mutationList) {
-            if (mutation.type === 'attributes') {
-                let id = document.getElementsByTagName('body')[0].getAttribute('promise-' + randomId);
-                if (isRunningTask) {
-                    nextTick(functionStorage[id]);
-                } else {
-                    isRunningTask = true;
-
-                    try {
-                        functionStorage[id]();
-                    } catch (e) {
-
-                    }
-
-                    isRunningTask = false;
-                }
-
-                delete functionStorage[id];
-                functionStorage[id] = void 0;
-            }
-        }
-    });
-
-    observer.observe(document.getElementsByTagName('body')[0], {attributes: true});
-}
 
 if (global.postMessage) {
     global.addEventListener('message', (e) => {
@@ -71,10 +43,7 @@ if (global.postMessage) {
 }
 
 function nextTick(func) {
-    if (global.MutationObserver) {
-        functionStorage[++index] = func;
-        document.getElementsByTagName('body')[0].setAttribute('promise-' + randomId, index + '');
-    } else if (global.setImmediate) {
+    if (global.setImmediate) {
         global.setImmediate(func);
     } else if (global.postMessage) {
         functionStorage[++index] = func;
@@ -84,7 +53,7 @@ function nextTick(func) {
     }
 }
 
-export default class Promise {
+export default class TypeScriptPromise {
     public static _d = 1;
 
     private _value;
@@ -115,42 +84,42 @@ export default class Promise {
     }
 
     public static resolve(value?) {
-        if (Promise._d !== 1) {
+        if (TypeScriptPromise._d !== 1) {
             throw TypeError();
         }
 
-        if (value instanceof Promise) {
+        if (value instanceof TypeScriptPromise) {
             return value;
         }
 
-        return new Promise((resolve) => {
+        return new TypeScriptPromise((resolve) => {
             resolve(value);
         });
     }
 
     public static reject(value?) {
-        if (Promise._d !== 1) {
+        if (TypeScriptPromise._d !== 1) {
             throw TypeError();
         }
 
-        return new Promise((resolve, reject) => {
+        return new TypeScriptPromise((resolve, reject) => {
             reject(value);
         });
     }
 
     public static all(arr) {
-        if (Promise._d !== 1) {
+        if (TypeScriptPromise._d !== 1) {
             throw TypeError();
         }
 
         if (!(arr instanceof Array)) {
-            return Promise.reject(new TypeError());
+            return TypeScriptPromise.reject(new TypeError());
         }
 
-        let promise = new Promise();;
+        let promise = new TypeScriptPromise();;
 
         function done() {
-            // 统计还有多少未完成的Promise
+            // 统计还有多少未完成的TypeScriptPromise
             // count the unresolved promise
             let unresolvedNumber = arr.filter((element) => {
                 return element && element.then;
@@ -177,15 +146,15 @@ export default class Promise {
     }
 
     public static race(arr) {
-        if (Promise._d !== 1) {
+        if (TypeScriptPromise._d !== 1) {
             throw TypeError();
         }
 
         if (!(arr instanceof Array)) {
-            return Promise.reject(new TypeError());
+            return TypeScriptPromise.reject(new TypeError());
         }
 
-        let promise = new Promise();
+        let promise = new TypeScriptPromise();
 
         function done(value?) {
             if (value) {
@@ -240,11 +209,11 @@ export default class Promise {
     }
 
     public then(fn, er?) {
-        if (Promise._d !== 1) {
+        if (TypeScriptPromise._d !== 1) {
             throw TypeError();
         }
 
-        let promise = new Promise();
+        let promise = new TypeScriptPromise();
         promise.fn = fn;
         promise.er = er;
 
@@ -265,11 +234,11 @@ export default class Promise {
 
 
     /**
-     * 用于处理异步调用情况。首先需要判断传入的value是否为另一个Promise，如果是则需要判断传入Promise情况，通过循环调用解决传入Promise问题；如果不是则直接处理异步逻辑
+     * 用于处理异步调用情况。首先需要判断传入的value是否为另一个TypeScriptPromise，如果是则需要判断传入TypeScriptPromise情况，通过循环调用解决传入TypeScriptPromise问题；如果不是则直接处理异步逻辑
      * handle the 
      * 
      * @private
-     * @memberof Promise
+     * @memberof TypeScriptPromise
      */
     private _handleNextTick() {
         let ref;
@@ -289,7 +258,7 @@ export default class Promise {
 
         if (this.state !== State.rejecting && (typeof this._value === 'object' || typeof this._value === 'function') && typeof ref === 'function') {
             // add a then function to get the status of the promise
-            // 在原有Promise后增加一个then函数用来判断原有promise的状态
+            // 在原有TypeScriptPromise后增加一个then函数用来判断原有promise的状态
 
             try {
                 ref.call(this._value, (value) => {
@@ -328,9 +297,9 @@ export default class Promise {
                 this.state = State.rejecting;
                 this._reason = e;
                 this._value = void 0;
-                this._finishThisPromise();
+                this._finishThisTypeScriptPromise();
             }
-    
+
             // if promise === x, use TypeError to reject promise
             // 如果promise和x指向同一个对象，那么用TypeError作为原因拒绝promise
             if (this._value === this) {
@@ -338,23 +307,23 @@ export default class Promise {
                 this._reason = new TypeError();
                 this._value = void 0;
             }
-    
-            this._finishThisPromise();
+
+            this._finishThisTypeScriptPromise();
         }
     }
 
-    private _finishThisPromise() {
+    private _finishThisTypeScriptPromise() {
         if (this.state === State.resolving) {
             this.state = State.resolved;
 
-            this._next.map((nextPromise) => {
-                nextPromise.resolve(this._value);
+            this._next.map((nextTypeScriptPromise) => {
+                nextTypeScriptPromise.resolve(this._value);
             });
         } else {
             this.state = State.rejected;
 
-            this._next.map((nextPromise) => {
-                nextPromise.reject(this._reason);
+            this._next.map((nextTypeScriptPromise) => {
+                nextTypeScriptPromise.reject(this._reason);
             });
         }
     }
