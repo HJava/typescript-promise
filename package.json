@@ -21,7 +21,7 @@
         "promises-aplus-tests": "^2.1.2"
     },
     "scripts": {
-        "build": "tsc promise.ts",
-        "promise.test": "promises-aplus-tests /promise-test"
+        "build": "tsc src/promise.ts --outDir lib/",
+        "promise.test": "promises-aplus-tests test/promise-test"
     }
 }

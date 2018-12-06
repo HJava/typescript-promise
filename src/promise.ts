@@ -114,7 +114,7 @@ export default class Promise {
         }
     }
 
-    public static resolve(value) {
+    public static resolve(value?) {
         if (Promise._d !== 1) {
             throw TypeError();
         }
@@ -128,7 +128,7 @@ export default class Promise {
         });
     }
 
-    public static reject(value) {
+    public static reject(value?) {
         if (Promise._d !== 1) {
             throw TypeError();
         }
@@ -239,7 +239,7 @@ export default class Promise {
         return this;
     }
 
-    public then(fn, er) {
+    public then(fn, er?) {
         if (Promise._d !== 1) {
             throw TypeError();
         }

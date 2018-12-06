@@ -1,5 +1,5 @@
 var promisesAplusTests = require("promises-aplus-tests");
-var Promise = require('./promise.js').default;
+var Promise = require('../lib/promise.js').default;
 
 var adapter = {};
 
